@@ -34,9 +34,10 @@ The following must be installed on your system for this script to work (They com
 
 First, open your terminal and download the script to your computer:
 
+```bash
 git clone https://github.com/renardozt/linux-bluetooth-fix.git
 cd linux-bluetooth-fix
-
+```
 
 ### 2. Automated Installation (RECOMMENDED)
 
@@ -44,8 +45,10 @@ The easiest way to use this fix is to install it as a background service. We hav
 
 Simply run:
 
+```bash
 chmod +x install.sh
 ./install.sh
+```
 
 
 **That's it!** The keepalive service is now active and will automatically start running in the background every time you log in. Your headphones will no longer fall asleep.
@@ -54,12 +57,15 @@ chmod +x install.sh
 
 If you just want to test the script without installing it permanently:
 
+```bash
 chmod +x bluetooth_keepalive.sh
 ./bluetooth_keepalive.sh
-
+```
 
 The script will continue to run until you close the terminal. To view the logs, you can open a new terminal window and enter the following command:
-`tail -f ~/.bluetooth_reconnect.log`
+```bash
+tail -f ~/.bluetooth_reconnect.log
+```
 
 ## ⚙️ Manual Installation (Advanced)
 
@@ -67,19 +73,22 @@ If you prefer not to use the automated `install.sh` and want to set up the syste
 
 **1.** Move the script to a safe location (e.g., the `~/.local/bin/` directory):
 
+```bash
 mkdir -p ~/.local/bin
 cp bluetooth_keepalive.sh ~/.local/bin/
 chmod +x ~/.local/bin/bluetooth_keepalive.sh
-
+```
 
 **2.** Create the Systemd user service file:
 
+```bash
 mkdir -p ~/.config/systemd/user/
 nano ~/.config/systemd/user/bluetooth-keepalive.service
-
+```
 
 **3.** Paste the following configuration inside, save, and exit (in nano: `Ctrl+O`, `Enter`, `Ctrl+X`):
 
+```ini
 [Unit]
 Description=Bluetooth Audio Keepalive Service
 After=pulseaudio.service pipewire-pulse.service
@@ -91,34 +100,40 @@ RestartSec=10
 
 [Install]
 WantedBy=default.target
-
+```
 
 **4.** Enable and start the service:
 
+```bash
 systemctl --user daemon-reload
 systemctl --user enable --now bluetooth-keepalive.service
-
+```
 
 To check the status of the service, you can use this command:
-`systemctl --user status bluetooth-keepalive.service`
+```bash
+systemctl --user status bluetooth-keepalive.service
+```
 
 ## 🗑️ Uninstall
 
 If you want to stop and completely remove the service, you can run the following commands in order:
 
+```bash
 systemctl --user disable --now bluetooth-keepalive.service
 rm ~/.config/systemd/user/bluetooth-keepalive.service
 systemctl --user daemon-reload
 rm ~/.local/bin/bluetooth_keepalive.sh
 rm ~/.bluetooth_reconnect.log
+```
 
 
 ## 📜 Logs
 
 The script logs its background activities to a hidden file in your home directory. If you want to check it out:
 
+```bash
 cat ~/.bluetooth_reconnect.log
-
+```
 
 ## 🤝 Contributing
 
